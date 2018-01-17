@@ -26,6 +26,13 @@ int tempF(int tempC)
   return output;
 }
 
+// DHT11 doesn't like to make fast reads on sensor data. A delay of 1.25 seconds tends to keep it from erring out.
+void readTemp()
+{
+  DHT.read11(DHT11_PIN); // DHT11 library function to read the temperature and humidity into memory
+  delay(1250);
+}
+
 void setup() 
  {
     // Prepare serial communications
@@ -47,7 +54,7 @@ void setup()
 void loop() 
   {
     // put your main code here, to run repeatedly:
-    DHT.read11(DHT11_PIN); // Function to read the temperature and humidity into memory
+    readTemp();
     lcd.setCursor(0,0);
     lcd.print("Current Temp:");
     lcd.setCursor(0,1); // Sets LCD cursor to column 0, line 1 (first column, line 2)
@@ -55,6 +62,4 @@ void loop()
     Serial.print(tempF(DHT.temperature), 1);
     Serial.print("\n");
     lcd.blink();
-    delay(2000); // DHT11 doesn't like to make fast reads on sensor data. A delay of 2 seconds tends to keep it from erring out.
-
 }
